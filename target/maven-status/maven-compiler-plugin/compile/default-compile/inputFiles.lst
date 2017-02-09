@@ -1,0 +1,7 @@
+/home/nick/foodpanda/kafka-connect-test/src/main/java/com/example/serializers/SpecificAvroDeserializer.java
+/home/nick/foodpanda/kafka-connect-test/src/main/java/com/example/serializers/SpecificAvroSerializer.java
+/home/nick/foodpanda/kafka-connect-test/src/main/java/com/example/producers/CommandGenerator.java
+/home/nick/foodpanda/kafka-connect-test/src/main/java/com/example/producers/AvroTestProducer.java
+/home/nick/foodpanda/kafka-connect-test/src/main/java/com/example/TestProcessor.java
+/home/nick/foodpanda/kafka-connect-test/src/main/java/com/example/serializers/SpecificAvroSerde.java
+/home/nick/foodpanda/kafka-connect-test/target/generated-sources/com/example/avro/Test.java
