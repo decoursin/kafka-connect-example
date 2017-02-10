@@ -16,7 +16,7 @@ public class AvroTestProducer {
         props.put("bootstrap.servers", "localhost:9092");
         props.put("acks", "all");
         props.put("retries", 0);
-        props.put("key.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
         props.put("schema.registry.url", TestProcessor.SCHEMA_REGISTRY_URL);
 
