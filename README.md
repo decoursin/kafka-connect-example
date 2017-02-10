@@ -1,5 +1,9 @@
 # Kafka Connect Example
 
+A simple example of using Kafka Connect with Kafka Streams.
+
+### Setup
+
 1) Install Confluent on your company (needed for some of the scripts)
 
 2) run `./kafka-start` to start docker containers
