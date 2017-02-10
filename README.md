@@ -10,10 +10,10 @@
 
 4) package it: `mvn package`
 
-4) Run `TestProcessor.java`
+4) Run `TestProcessor.java`: `java -cp target/streams-1.0-SNAPSHOT-standalone.jar com.example.TestProcessor`
 - mvn pa
 
-5) Run the `AvroTestProducer.java` to produce commands.
+5) Run the `AvroTestProducer.java` to produce commands: `java -cp target/streams-1.0-SNAPSHOT-standalone.jar com.example.producers.AvroTestProducer`
 
 6) Check if the data is replicated to postgres
 - `psql -U postgres -h localhost -p 7999`
