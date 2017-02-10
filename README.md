@@ -19,7 +19,5 @@ A simple example of using Kafka Connect with Kafka Streams.
 6) Run the `AvroTestProducer.java` to produce commands: `java -cp target/streams-1.0-SNAPSHOT-standalone.jar com.example.producers.AvroTestProducer`
 
 7) Check if the data is replicated to postgres
-- `psql -U postgres -h localhost -p 7999` (password postgres)
-- `\connect kafka`
-- `select * from test;`
-- `select * from test2;`
+- `psql -U postgres -h localhost -p 7999 -f test.sql`
+- `psql -U postgres -h localhost -p 7999 -f test2.sql`
