@@ -1,0 +1,1 @@
+java -cp target/streams-1.0-SNAPSHOT-standalone.jar com.example.TestProcessor
