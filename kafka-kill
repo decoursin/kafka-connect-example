@@ -7,18 +7,20 @@ echo $'stopping containers..'
 docker stop kafka-rest
 docker stop kafka-connect
 docker stop kafka
-docker stop schema-registry
-docker stop zookeeper
+docker stop kafka-schema-registry
+docker stop kafka-zookeeper
 docker stop kafka-postgres
+docker stop kafka-control-center
 
 echo $'\nremoving containers..'
 
 docker rm kafka-rest
 docker rm kafka-connect
 docker rm kafka
-docker rm schema-registry
-docker rm zookeeper
+docker rm kafka-schema-registry
+docker rm kafka-zookeeper
 docker rm kafka-postgres
+docker rm kafka-control-center
 
 echo $'\nkilling process..'
 

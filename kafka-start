@@ -1,7 +1,5 @@
 #! /bin/bash
 
-# start everything that's need to run kafka.
-
 zookeeper_port=2181
 kafka_port=9092
 schema_registry_port=8081
@@ -12,83 +10,83 @@ postgres_port=7999
 
 ## zookeeper
 docker run -d \
-    --net=host \
-    --name=kafka-zookeeper \
-    -e ZOOKEEPER_CLIENT_PORT="$zookeeper_port" \
-    confluentinc/cp-zookeeper:latest
+       --net=host \
+       --name=kafka-zookeeper \
+       -e ZOOKEEPER_CLIENT_PORT="$zookeeper_port" \
+       confluentinc/cp-zookeeper:latest
 
 ## kafka
 docker run -d \
-    --net=host \
-    --name=kafka \
-    -e KAFKA_ZOOKEEPER_CONNECT=localhost:"$zookeeper_port" \
-    -e KAFKA_ADVERTISED_LISTENERS="PLAINTEXT://localhost:$kafka_port" \
-    confluentinc/cp-kafka:latest
+       --net=host \
+       --name=kafka \
+       -e KAFKA_ZOOKEEPER_CONNECT=localhost:"$zookeeper_port" \
+       -e KAFKA_ADVERTISED_LISTENERS="PLAINTEXT://localhost:$kafka_port" \
+       confluentinc/cp-kafka:latest
 
 ## schema-registry
 docker run -d \
-  --net=host \
-  --name=kafka-schema-registry \
-  -e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL="localhost:$zookeeper_port" \
-  -e SCHEMA_REGISTRY_HOST_NAME=localhost \
-  -e SCHEMA_REGISTRY_LISTENERS="http://localhost:$schema_registry_port" \
-  confluentinc/cp-schema-registry:latest
+       --net=host \
+       --name=kafka-schema-registry \
+       -e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL="localhost:$zookeeper_port" \
+       -e SCHEMA_REGISTRY_HOST_NAME=localhost \
+       -e SCHEMA_REGISTRY_LISTENERS="http://localhost:$schema_registry_port" \
+       confluentinc/cp-schema-registry:latest
 
 ## kafka-rest
 docker run -d \
-  --net=host \
-  --name=kafka-rest \
-  -e KAFKA_REST_ZOOKEEPER_CONNECT="localhost:$zookeeper_port" \
-  -e KAFKA_REST_SCHEMA_REGISTRY_URL="http://localhost:$schema_registry_port" \
-  -e KAFKA_REST_LISTENERS="http://localhost:$rest_port" \
-  -e KAFKA_REST_HOST_NAME=localhost \
-  confluentinc/cp-kafka-rest:latest
+       --net=host \
+       --name=kafka-rest \
+       -e KAFKA_REST_ZOOKEEPER_CONNECT="localhost:$zookeeper_port" \
+       -e KAFKA_REST_SCHEMA_REGISTRY_URL="http://localhost:$schema_registry_port" \
+       -e KAFKA_REST_LISTENERS="http://localhost:$rest_port" \
+       -e KAFKA_REST_HOST_NAME=localhost \
+       confluentinc/cp-kafka-rest:latest
 
 ## kafka-connect
 docker run -d \
-  --name=kafka-connect \
-  --net=host \
-  -e CONNECT_PRODUCER_INTERCEPTOR_CLASSES=io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor \
-  -e CONNECT_CONSUMER_INTERCEPTOR_CLASSES=io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor \
-  -e CONNECT_BOOTSTRAP_SERVERS="localhost:$kafka_port" \
-  -e CONNECT_REST_PORT="$connect_port" \
-  -e CONNECT_GROUP_ID="example" \
-  -e CONNECT_CONFIG_STORAGE_TOPIC="example-config" \
-  -e CONNECT_OFFSET_STORAGE_TOPIC="example-offsets" \
-  -e CONNECT_STATUS_STORAGE_TOPIC="example-status" \
-  -e CONNECT_KEY_CONVERTER="org.apache.kafka.connect.storage.StringConverter" \
-  -e CONNECT_VALUE_CONVERTER="io.confluent.connect.avro.AvroConverter" \
-  -e CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL="http://localhost:$schema_registry_port" \
-  -e CONNECT_INTERNAL_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
-  -e CONNECT_INTERNAL_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
-  -e CONNECT_REST_ADVERTISED_HOST_NAME="localhost" \
-  -e CONNECT_LOG4J_ROOT_LOGLEVEL=DEBUG \
-  confluentinc/cp-kafka-connect:latest
+       --name=kafka-connect \
+       --net=host \
+       -e CONNECT_PRODUCER_INTERCEPTOR_CLASSES=io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor \
+       -e CONNECT_CONSUMER_INTERCEPTOR_CLASSES=io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor \
+       -e CONNECT_BOOTSTRAP_SERVERS="localhost:$kafka_port" \
+       -e CONNECT_REST_PORT="$connect_port" \
+       -e CONNECT_GROUP_ID="example" \
+       -e CONNECT_CONFIG_STORAGE_TOPIC="example-config" \
+       -e CONNECT_OFFSET_STORAGE_TOPIC="example-offsets" \
+       -e CONNECT_STATUS_STORAGE_TOPIC="example-status" \
+       -e CONNECT_KEY_CONVERTER="org.apache.kafka.connect.storage.StringConverter" \
+       -e CONNECT_VALUE_CONVERTER="io.confluent.connect.avro.AvroConverter" \
+       -e CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL="http://localhost:$schema_registry_port" \
+       -e CONNECT_INTERNAL_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+       -e CONNECT_INTERNAL_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+       -e CONNECT_REST_ADVERTISED_HOST_NAME="localhost" \
+       -e CONNECT_LOG4J_ROOT_LOGLEVEL=DEBUG \
+       confluentinc/cp-kafka-connect:latest
 
 ## kakfa-control-center
 docker run -d \
-  --name=kafka-control-center \
-  --net=host \
-  --ulimit nofile=16384:16384 \
-  -p "$control_center_port:9021" \
-  -v /tmp/control-center/data:/var/lib/confluent-control-center \
-  -e CONTROL_CENTER_ZOOKEEPER_CONNECT="localhost:$zookeeper_port" \
-  -e CONTROL_CENTER_BOOTSTRAP_SERVERS="localhost:$kafka_port" \
-  -e CONTROL_CENTER_REPLICATION_FACTOR=1 \
-  -e CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS=1 \
-  -e CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS=1 \
-  -e CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS=2 \
-  -e CONTROL_CENTER_CONNECT_CLUSTER="http://localhost:$connect_port" \
-  confluentinc/cp-enterprise-control-center:3.2.1
+       --name=kafka-control-center \
+       --net=host \
+       --ulimit nofile=16384:16384 \
+       -p "$control_center_port:9021" \
+       -v /tmp/control-center/data:/var/lib/confluent-control-center \
+       -e CONTROL_CENTER_ZOOKEEPER_CONNECT="localhost:$zookeeper_port" \
+       -e CONTROL_CENTER_BOOTSTRAP_SERVERS="localhost:$kafka_port" \
+       -e CONTROL_CENTER_REPLICATION_FACTOR=1 \
+       -e CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS=1 \
+       -e CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS=1 \
+       -e CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS=2 \
+       -e CONTROL_CENTER_CONNECT_CLUSTER="http://localhost:$connect_port" \
+       confluentinc/cp-enterprise-control-center:3.2.1
 
 # postgres
 docker run -d \
-	--name=kafka-postgres \
-	-p "$postgres_port":5432 \
-	-e POSTGRES_USER=postgres \
-	-e POSTGRES_DB=kafka \
-	-e POSTGRES_PASSWORD=postgres \
-	postgres:9.5
+       --name=kafka-postgres \
+       -p "$postgres_port":5432 \
+       -e POSTGRES_USER=postgres \
+       -e POSTGRES_DB=kafka \
+       -e POSTGRES_PASSWORD=postgres \
+       postgres:9.5
 
 ## create topics
 ##
