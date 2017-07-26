@@ -85,7 +85,7 @@ docker run -d \
        -p "$postgres_port":5432 \
        -e POSTGRES_USER=postgres \
        -e POSTGRES_DB=kafka \
-       -e POSTGRES_PASSWORD=postgres \
+       -e POSTGRES_PASSWORD= \
        postgres:9.5
 
 ## create topics
