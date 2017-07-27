@@ -99,4 +99,4 @@ docker run -d \
 ## a topic to a broker.id that already belongs to one of the topics
 ## it just created, which fails.
 ##
-sleep 4; ./create-topics
+sleep 4; ./create-topics test

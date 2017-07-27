@@ -1,9 +1,16 @@
 #! /bin/bash
 
-TOPICS=test,test2
+set -euo pipefail
 
+if (( $# != 2 )); then
+    echo "Usage: `basename $0` TOPICS"
+    echo "Where TOPICS are comma separated: topic1,topic2"
+    exit 1
+fi
+
+topics=shift
 
 IFS=","
-for topic in ${TOPICS[@]}; do
-	kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic $topic
+for topic in ${topics[@]}; do
+    kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic $topic
 done;
