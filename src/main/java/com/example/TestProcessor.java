@@ -18,6 +18,8 @@ public class TestProcessor {
 
     public static final String SCHEMA_REGISTRY_URL = "http://localhost:8081";
 
+    private static final String OUTPUT_TOPIC = "output";
+
     public static void main(final String[] args) throws Exception {
         final Properties streamsConfiguration = new Properties();
         streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
@@ -43,7 +45,7 @@ public class TestProcessor {
 
             return KeyValue.pair(UUID.randomUUID().toString(), command);
         })
-            .to(Serdes.String(), testSpecificAvroSerde, "test2");
+            .to(Serdes.String(), testSpecificAvroSerde, OUTPUT_TOPIC);
 
         System.out.println("starting stream...");
 

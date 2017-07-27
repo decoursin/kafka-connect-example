@@ -20,8 +20,10 @@ public class AvroTestProducer {
         props.put("value.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
         props.put("schema.registry.url", TestProcessor.SCHEMA_REGISTRY_URL);
 
-        String topic = "test";
-        int wait = 500;
+        if (args.length != 1) {
+            throw new IllegalArgumentException("The first argument (mandatory) should be the topic name.");
+        }
+        String topic = args[0];
 
         Producer<String, Test> producer = new KafkaProducer<>(props);
 
@@ -31,7 +33,7 @@ public class AvroTestProducer {
 
             ProducerRecord<String, Test> record = new ProducerRecord<>(topic, UUID.randomUUID().toString(), command);
             producer.send(record);
-            Thread.sleep(wait);
+            Thread.sleep(500);
         }
     }
 }
