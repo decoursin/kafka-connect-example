@@ -9,12 +9,6 @@
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <organization>
-        <name>example</name>
-        <url>http://www.example.com</url>
-    </organization>
-    <url>http://www.example.com</url>
-
     <repositories>
         <repository>
             <id>confluent</id>
@@ -24,11 +18,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <kafka.version>0.10.1.1</kafka.version>
+        <kafka.version>0.10.2.1-cp2</kafka.version>
         <kafka.scala.version>2.11</kafka.scala.version>
         <scala.version>${kafka.scala.version}.8</scala.version>
-        <confluent.version>3.1.1</confluent.version>
-        <scalatest.version>2.2.6</scalatest.version>
+        <confluent.version>3.2.2</confluent.version>
         <avro.version>1.7.7</avro.version>
         <jetty.version>9.2.12.v20150709</jetty.version>
         <jersey.version>2.19</jersey.version>
@@ -207,23 +200,6 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-
-        <!-- The following dependencies on ScalaTest are only required for the Scala tests
-             under src/test/scala/.  They are not required for Java code/tests.
-        -->
-        <dependency>
-            <!-- This is a compile-time dependency but included only for scalatest below,
-                 so still list it under test dependencies. -->
-            <groupId>org.scalactic</groupId>
-            <artifactId>scalactic_${kafka.scala.version}</artifactId>
-            <version>${scalatest.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-          <artifactId>scalatest_${kafka.scala.version}</artifactId>
-          <version>${scalatest.version}</version>
-          <scope>test</scope>
-      </dependency>
     </dependencies>
 
     <build>
